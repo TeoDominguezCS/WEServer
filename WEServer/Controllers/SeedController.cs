@@ -10,14 +10,32 @@ using CsvHelper.Configuration;
 using System.Globalization;
 using WEServer.Data;
 using CsvHelper;
+using Microsoft.AspNetCore.Identity;
 
 namespace WEServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SeedController(WorldCitiesSourceContext context, IHostEnvironment environment) : ControllerBase
+    public class SeedController(WorldCitiesSourceContext context, IHostEnvironment environment,
+        UserManager<WorldCitiesUser> userManager) : ControllerBase
     {
         string _pathName = Path.Combine(environment.ContentRootPath, "Data/worldcities.csv");
+        
+        [HttpPost("Users")]
+        public async Task ImportUsersAsync()
+        {
+            WorldCitiesUser user = new()
+            {
+                UserName = "user",
+                Email = "user@email.com",
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            IdentityResult x = await userManager.CreateAsync(user, "Password0!");
+            int y = await context.SaveChangesAsync();
+
+        }
+
         [HttpPost("Countries")]
         public async Task<ActionResult> ImportCountriesAsync()
         {
