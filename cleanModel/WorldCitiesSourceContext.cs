@@ -24,6 +24,10 @@ public partial class WorldCitiesSourceContext : IdentityDbContext<WorldCitiesUse
     //removing hardcoded db connection
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (optionsBuilder.IsConfigured)
+        {
+            return;
+        }
         IConfigurationBuilder builder = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json");
         IConfigurationRoot configuration = builder.Build();
