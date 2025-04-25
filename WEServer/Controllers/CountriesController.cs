@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using cleanModel;
 using WEServer.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WEServer.Controllers
 {
@@ -27,7 +28,7 @@ namespace WEServer.Controllers
         {
             return await _context.Countries.ToListAsync();
         }
-
+        [Authorize]
         // GET: api/Countries/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Country>> GetCountry(int id)
@@ -42,6 +43,7 @@ namespace WEServer.Controllers
             return country;
         }
 
+        [Authorize]
         [HttpGet("GetPopulation/{id}")]
         public async Task<ActionResult<CountryPopulation>> GetCountryPopulation(int id)
         {
